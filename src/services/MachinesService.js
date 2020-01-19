@@ -14,7 +14,8 @@ const getAllMachines = async (req, res) => {
         required: false,
         attributes: ['id', 'name'],
         through: { attributes: [] }
-      }]
+      }],
+        order: [[models.Sequelize.literal('`status.MachineStatus.createdAt`'), 'DESC']]
     })
     return res.json(machines)
 }
