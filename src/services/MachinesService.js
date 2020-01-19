@@ -1,41 +1,36 @@
-const Sequelize = require('sequelize')
-const dbUser = process.env.DB_USER || 'root'
-const dbPassword = process.env.DB_PASSWORD || '123456'
-const dbName = process.env.DB_NAME || 'machine-status-monitor'
-const dbHost = process.env.DB_HOST || 'localhost'
-
-// const sequelize = require('./connection')
-const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-  host: dbHost,
-  dialect: 'mysql'
-});
-
-const MachineModel = sequelize.import('../models/Machine')
+const models = require('../models')
 
 const addMachine = async (req, res) => {
-    const machine = await MachineModel.create(req.body)
+    const machine = await models.Machine.create(req.body)
     return res.json(machine)
 }
 
 const getAllMachines = async (req, res) => {
-    const machines = await MachineModel.findAll({
-      attributes: ['id', 'name']
+    const machines = await models.Machine.findAll({
+      attributes: ['id', 'name'],
+      include: [{
+        model: models.Status,
+        as: 'status',
+        required: false,
+        attributes: ['id', 'name'],
+        through: { attributes: [] }
+      }]
     })
     return res.json(machines)
 }
 
 const getMachine = async (req, res) => {
-    const machine = await MachineModel.findByPk(req.params.id)
+    const machine = await models.Machine.findByPk(req.params.id)
     return res.json(machine)
 }
 
 const updateMachine = async (req, res) => {
-    const machine = await MachineModel.update(req.body, { where: { id: req.params.id }})
+    const machine = await models.Machine.update(req.body, { where: { id: req.params.id }})
     return res.json(machine)
 }
 
 const deleteMachine = async (req, res) => {
-    const machine = await MachineModel.destroy({ where: { id: req.params.id } })
+    const machine = await models.Machine.destroy({ where: { id: req.params.id } })
     return res.json(machine)
 }
 

@@ -2,12 +2,14 @@ module.exports = (sequelize, DataTypes) => {
   const Machine = sequelize.define('Machine', {
     name: DataTypes.STRING,
   }, { tableName: 'machine' });
-//  Machines.associate = function(models) {
-//    Post.hasMany(models.Comment, {
-//      foreignKey: 'postId',
-//      as: 'comments',
-//      onDelete: 'CASCADE',
-//    });
-//  };
+
+  Machine.associate = (models) => {
+    Machine.belongsToMany(models.Status, {
+      through: 'MachineStatus',
+        as: 'status',
+        foreignKey: 'id_machine',
+        otherKey: 'id_status'
+    });
+  };
   return Machine;
 }
