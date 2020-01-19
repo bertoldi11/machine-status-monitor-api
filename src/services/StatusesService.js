@@ -1,8 +1,12 @@
 const Sequelize = require('sequelize')
+const dbUser = process.env.DB_USER || 'root'
+const dbPassword = process.env.DB_PASSWORD || '123456'
+const dbName = process.env.DB_NAME || 'machine-status-monitor'
+const dbHost = process.env.DB_HOST || 'localhost'
 
 // const sequelize = require('./connection')
-const sequelize = new Sequelize('machine-status-monitor', 'root', '123456', {
-  host: 'localhost',
+const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
+  host: dbHost,
   dialect: 'mysql'
 });
 
