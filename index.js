@@ -7,7 +7,7 @@ const app = express()
 const port = process.env.PORT || 3000
 const consumerUrl = process.env.CONSUMER_URL || 'http://192.168.0.8:8080'
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('*/30 * * * *', () => {
     generateRandomStatus()
 });
 
